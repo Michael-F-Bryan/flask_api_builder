@@ -3,14 +3,14 @@ Flask API Builder
 =================
 
 .. image:: https://img.shields.io/pypi/v/flask_api_builder.svg?maxAge=2592000?style=plastic
-    :alt: PyPI Version
+   :alt: PyPI Version
 
 .. image:: https://img.shields.io/pypi/l/Django.svg?maxAge=2592000?style=plastic
-    :alt: PyPI License
+   :alt: PyPI License
 
- .. image:: https://travis-ci.org/Michael-F-Bryan/flask_api_builder.svg?branch=master
-     :target: https://travis-ci.org/Michael-F-Bryan/flask_api_builder
-     :alt: Current Travis Build
+.. image:: https://travis-ci.org/Michael-F-Bryan/flask_api_builder.svg?branch=master
+   :target: https://travis-ci.org/Michael-F-Bryan/flask_api_builder
+   :alt: Current Travis Build
 
 A really simple app that allows you to write out your RESTful APIs spec in a 
 logical form and automatically generate stub functions for each endpoint.

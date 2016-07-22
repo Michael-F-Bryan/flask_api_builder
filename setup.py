@@ -16,7 +16,7 @@ setup(
         author_email='michaelfbryan@gmail.com',
         packages=['flask_api_builder'],
         include_package_data=True,
-        license="MIT license",
+        license="MIT",
         url='https://github.com/Michael-F-Bryan/flask_api_builder',
 
         entry_points={
