@@ -1,0 +1,6 @@
+.coverage
+.cache
+.ipynb_checkpoints
+htmlcov
+__pycache__
+*.py[co]
