@@ -9,7 +9,7 @@ long_description = (open('README.rst').read() +
 
 setup(
         name='flask_api_builder',
-        version='0.1.1',
+        version='0.2.0',
         description="A shortcut for stubbing out your RESTful Flask APIs",
         long_description=long_description,
         author="Michael F Bryan",
