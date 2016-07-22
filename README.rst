@@ -2,6 +2,14 @@
 Flask API Builder
 =================
 
+.. PyPI version
+.. image:: https://img.shields.io/pypi/v/flask_api_builder.svg?maxAge=2592000?style=plastic
+    :target: 
+
+.. PyPI license
+.. image:: https://img.shields.io/pypi/l/Django.svg?maxAge=2592000?style=plastic
+    :target: 
+
 A really simple app that allows you to write out your RESTful APIs spec in a 
 logical form and automatically generate stub functions for each endpoint.
 
@@ -15,7 +23,7 @@ Install from Source
 To install from source, you will need to first clone the repository from
 GitHub::
 
-    git clone XXXX
+    git clone https://github.com/Michael-F-Bryan/flask_api_builder.git
 
 Then run the `setup.py` file::
 
