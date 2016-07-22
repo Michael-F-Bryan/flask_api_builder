@@ -25,4 +25,10 @@ changes:
 	pandoc --from=markdown --to=rst -o CHANGELOG.rst $(TEMP_CHANGES)
 	$(RM) $(TEMP_CHANGES)
 
+sdist:
+	python setup.py sdist
+
+wheel:
+	python setup.py bdist_wheel
+
 .PHONY: changes coverage tests

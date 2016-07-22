@@ -1,0 +1,3 @@
+include *.rst
+include LICENSE
+include flask_api_builder/examples/*
