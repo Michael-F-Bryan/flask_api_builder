@@ -25,10 +25,19 @@ changes:
 	pandoc --from=markdown --to=rst -o CHANGELOG.rst $(TEMP_CHANGES)
 	$(RM) $(TEMP_CHANGES)
 
+bump-patch:
+	bumpversion patch
+
+bump-minor:
+	bumpversion minor
+
+bump-major:
+	bumpversion major
+
 sdist:
 	python setup.py sdist
 
 wheel:
 	python setup.py bdist_wheel
 
-.PHONY: changes coverage tests
+.PHONY: changes coverage tests sdist wheel bump-minor bump-patch bump-major lint
