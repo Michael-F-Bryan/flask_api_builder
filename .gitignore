@@ -5,3 +5,4 @@ htmlcov
 __pycache__
 *.py[co]
 prototyping.*
+*.egg-info

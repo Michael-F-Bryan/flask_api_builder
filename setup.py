@@ -14,12 +14,19 @@ setup(
         long_description=long_description,
         author="Michael F Bryan",
         author_email='michaelfbryan@gmail.com',
-        packages='flask_api_builder',
+        packages=['flask_api_builder'],
         include_package_data=True,
         license="MIT license",
 
+        entry_points={
+            'console_scripts': [
+                'flask-api-builder=flask_api_builder.__main__:main'
+            ],
+        },
+
         install_requires=[
             'jinja2',
+            'docopt',
             ],
         tests_require=[
             'pytest',
