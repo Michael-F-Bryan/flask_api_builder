@@ -5,7 +5,7 @@ Flask API Builder
 .. image:: https://img.shields.io/pypi/v/flask_api_builder.svg?maxAge=2592000?style=plastic
    :alt: PyPI Version
 
-.. image:: https://img.shields.io/pypi/l/Django.svg?maxAge=2592000?style=plastic
+.. image:: https://img.shields.io/pypi/l/flask_api_builder.svg?maxAge=2592000?style=plastic
    :alt: PyPI License
 
 .. image:: https://travis-ci.org/Michael-F-Bryan/flask_api_builder.svg?branch=master
