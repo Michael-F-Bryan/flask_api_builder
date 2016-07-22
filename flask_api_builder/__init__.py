@@ -3,7 +3,7 @@ A really simple app that allows you to write out your RESTful API's spec
 in a logical form and automatically generate the necessary boilerplate.`
 """
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __all__ = [
         'MalformedParameterWarning',
         'Function',
