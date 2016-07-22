@@ -4,6 +4,7 @@ COV_ARGS = --source=$(SOURCES) --branch
 PYTEST_ARGS = 
 TESTS = tests.py
 BROWSER = chromium-browser
+PYLINT_ARGS = --reports=no --output-format=colorized
 
 coverage:
 	coverage run $(COV_ARGS) -m pytest $(PYTEST_ARGS) $(TESTS)
@@ -15,6 +16,9 @@ coverage:
 
 tests:
 	py.test $(TESTS)
+
+lint:
+	-pylint $(PYLINT_ARGS) flask_api_builder.py
 
 changes:
 	auto-changelog -o $(TEMP_CHANGES)

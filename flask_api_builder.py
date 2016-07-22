@@ -5,12 +5,15 @@ in a logical form and automatically generate the necessary boilerplate.`
 
 from collections import namedtuple
 import re
-import jinja2
 import warnings
+import jinja2
 
 
 class MalformedParameterWarning(Warning):
-    pass
+    """
+    A warning printed when the parser thinks that a user wrote a malformed
+    parameter.
+    """
 
 
 Rule = namedtuple('Rule', ('method', 'url', 'description', 'name'))
@@ -32,8 +35,13 @@ from flask import Blueprint
 
 
 class Function:
+    """
+    The class in charge of extracting all arguments from the url, generating
+    a default name (if necessary), and rendering an individual REST endpoint
+    function for Flask.
+    """
     def __init__(self, url, method, description, blueprint='api',
-            name=None, template=None):
+                 name=None, template=None):
         self.url = url
         self.method = method.upper()
         self.description = description
@@ -49,12 +57,12 @@ class Function:
         parameters = re.findall(r'<(?:[\w_]+:)?([\w_]+)>', self.url)
 
         if (self.url.count('<') != len(parameters) or
-            self.url.count('<') != len(parameters)):
+                self.url.count('<') != len(parameters)):
             warnings.warn(
-                    'The number of "<" or ">" is different from the number of '
-                    'parameters found. Make sure parameters look like '
-                    '"<int:task_id>"',
-                    MalformedParameterWarning)
+                'The number of "<" or ">" is different from the number of '
+                'parameters found. Make sure parameters look like '
+                '"<int:task_id>"',
+                MalformedParameterWarning)
 
         return parameters
 
@@ -94,26 +102,30 @@ class Function:
         Render the template given the information we already have.
         """
         args = self.get_args()
-        name = name or self.generate_name(args)
+        name = self.name or self.generate_name(args)
 
         func = self.template.render(
-                blueprint=self.blueprint,
-                url=self.url,
-                method=self.method,
-                name=name,
-                args_list=args,
-                docstring=self.description)
+            blueprint=self.blueprint,
+            url=self.url,
+            method=self.method,
+            name=name,
+            args_list=args,
+            docstring=self.description)
         return func
 
     def __repr__(self):
         return '<{}: url="{}" method="{}">'.format(
-                self.__class__.__name__,
-                self.url,
-                self.method)
+            self.__class__.__name__,
+            self.url,
+            self.method)
 
 
 
 class APIGenerator:
+    """
+    The generator which will render both the preamble and all the functions,
+    then join it all together into one string.
+    """
     def __init__(self, config, function_template=None):
         self.config = config
         self.blueprint = config.get('blueprint-name', 'api')
@@ -131,9 +143,8 @@ class APIGenerator:
         if 'prepend-with' in self.config:
             bp_args.append('url_prefix="{}"'.format(self.config['prepend-with']))
 
-        return PREAMBLE_TEMPLATE.render(
-                blueprint=self.blueprint,
-                bp_args=bp_args)
+        return PREAMBLE_TEMPLATE.render(blueprint=self.blueprint,
+                                        bp_args=bp_args)
 
     def functions(self):
         """
@@ -142,14 +153,14 @@ class APIGenerator:
         """
         funcs = []
         for rule in self.rules:
-            f = Function(
-                    rule.url,
-                    rule.method.upper(),
-                    rule.description,
-                    blueprint=self.blueprint,
-                    name=rule.name,
-                    template=self.function_template)
-            funcs.append(f)
+            func = Function(
+                rule.url,
+                rule.method.upper(),
+                rule.description,
+                blueprint=self.blueprint,
+                name=rule.name,
+                template=self.function_template)
+            funcs.append(func)
         return funcs
 
     def render(self):
@@ -171,6 +182,27 @@ class APIGenerator:
 
 
 def parse_spec(spec):
+    """
+    Parse a spec line by line and create a config dictionary from the results.
+
+    The parser will go through each line, splitting them wherever there are
+    2 or more whitespace characters next to each other.
+
+    Depending on the number of fields in the resulting list, the parser will
+    populate the config dictionary accordingly.
+
+    If there is only one field, assume that the user has provided some sort
+    of assignment in the form "key: value", split on the ":" and then
+    add the resulting key/value pair to the dictionary.
+
+    If there are 3 fields, assume they are [METHOD, URL, DESCRIPTION] and
+    add the corresponding rule to the dictionary.
+
+    If there are 4 fields, assume they are [METHOD, URL, DESCRIPTION, NAME]
+    and add the corresponding rule to the dictionary.
+
+    Otherwise there is a syntax error.
+    """
     config = {}
     config['rules'] = []
 
@@ -203,3 +235,13 @@ def parse_spec(spec):
             raise SyntaxError('Too many fields on line {}'.format(i+1))
 
     return config
+
+
+def make_api(spec):
+    """
+    Given a spec, parse the spec, make the API generator, and then render
+    an API for the user.
+    """
+    cfg = parse_spec(spec)
+    generator = APIGenerator(cfg)
+    return generator.render().strip()
