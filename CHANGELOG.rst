@@ -1,6 +1,14 @@
 Changelog
 =========
 
+[Unreleased]
+------------
+
+New Features
+~~~~~~~~~~~~
+
+-  Added error handlers to the generated code
+
 Version 0.1.1 (2016-44-23)
 --------------------------
 
