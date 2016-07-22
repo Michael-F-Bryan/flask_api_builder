@@ -39,10 +39,31 @@ def {{ name }}({{ args_list|join(', ') }}):
     raise NotImplemented''')
 
 PREAMBLE_TEMPLATE = jinja2.Template("""
-from flask import Blueprint
+from flask import Blueprint, jsonify
 
 {{ blueprint }} = Blueprint({{ bp_args|join(', ') }})
 """)
+
+ERROR_HANDLER_TEMPLATE = jinja2.Template("""
+@{{ blueprint }}.errorhandler(404)
+def page_not_found(error):
+    response = jsonify({'error': 'not found'})
+    response.status_code = 404
+    return response
+
+@{{ blueprint }}.errorhandler(500)
+def server_error(error):
+    response = jsonify({'error': 'server error'})
+    response.status_code = 500
+    return response
+""")
+
+
+def _is_true(string):
+    """
+    Check if something is truthy.
+    """
+    return str(string.lower().strip()) in ['true', '1', 'yes', 'y']
 
 
 class Function:
@@ -174,6 +195,13 @@ class APIGenerator:
             funcs.append(func)
         return funcs
 
+    def error_handlers(self):
+        """
+        Make a couple useful error handler routes for the user.
+        """
+        return ERROR_HANDLER_TEMPLATE.render(blueprint=self.blueprint)
+
+
     def render(self):
         """
         Generate our API file.
@@ -186,6 +214,14 @@ class APIGenerator:
         # Give it a bit of space
         lines.append('')
         lines.append('')
+
+        if _is_true(self.config.get('error-handlers', 'true')):
+            # Add the error handlers
+            lines.append(self.error_handlers())
+
+            # Give it a bit of space
+            lines.append('')
+            lines.append('')
 
         lines.extend(f.render()+'\n' for f in self.functions())
 

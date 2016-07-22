@@ -57,8 +57,11 @@ Blueprint-name
 Prepend-with
     The path that all endpoints attached to your API Blueprint are prepended
     with (nothing by default)
+Error-handlers
+    Add pre-made 404 and 500 error handlers. They will be included unless
+    something other than true, yes, 1, or y is entered (not case sensitive)
 
-All variables are **case insensitive**.
+All variable names are **not case sensitive**.
 
 
 Defining Endpoints
