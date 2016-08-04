@@ -10,6 +10,8 @@ Options:
     -o=OUT --out-file=OUT           The path of the generated spec
                                             [Default: stdout]
     -e --example                    Shows an example spec file
+    -f --force                      Overwrite the output file if it already
+                                    exists [Default: False]
     -h --help                       Print this help text
     -V --version                    Print the version information
 """
@@ -43,7 +45,12 @@ def _main(args):
     if args['--out-file'] == 'stdout':
         print(api_as_str)
     else:
-        with open(args['--out-file'], 'w') as f:
+        out_file = args['--out-file']
+        if os.path.exists(out_file) and not args['--force']:
+            print('File already exists: {}'.format(out_file))
+            sys.exit(1)
+
+        with open(out_file, 'w') as f:
             f.write(api_as_str)
 
 
